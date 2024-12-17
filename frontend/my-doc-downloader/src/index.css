@@ -1,0 +1,58 @@
+/* Reset styles for consistent appearance across browsers */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Set the body and root to take the full height */
+body, #root {
+  height: 100%;
+  width: 100%;
+  background-color: #ffffff; /* White background for the body */
+  margin: 0;
+  font-family: 'Roboto', sans-serif;
+}
+
+/* Main container styling */
+.container {
+  background-color: #ffffff; /* White background for the container */
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+  width: 100%;
+  height: 100%; /* Full height */
+  max-width: 800px; /* Restrict maximum width for readability */
+}
+
+/* Navbar styling */
+.MuiAppBar-root {
+  background-color: #004d40 !important; /* Very dark green for the navbar */
+  color: white;
+}
+
+/* Buttons */
+button {
+  background-color: #004d40; /* Very dark green button to match the navbar */
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #004d40; /* Even darker green on hover #00352f */
+}
+
+/* Form fields and dropdown */
+select, input {
+  width: 100%;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 16px;
+  border: 1px solid #ddd;
+  margin-bottom: 20px;
+}
