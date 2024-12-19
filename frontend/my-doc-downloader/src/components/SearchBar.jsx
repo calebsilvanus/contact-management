@@ -1,24 +1,16 @@
 import React, { useState } from "react";
-import {
-  TextField,
-  IconButton,
-  MenuItem,
-  CircularProgress,
-  ListItemAvatar,
-  Avatar,
-  ListItemText,
-} from "@mui/material";
+import { TextField, IconButton, MenuItem, CircularProgress, ListItemAvatar, Avatar, ListItemText } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 const SearchBar = ({ formValues, setFormValues }) => {
-  const [emailInput, setEmailInput] = useState("");
+  const [searchInput, setSearchInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState([]);
 
-  const BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5000/api";
+  const BASE_URL = "http://localhost:5000/api"; // Update this URL if needed
 
   const handleSearch = async () => {
-    if (!emailInput.trim()) {
+    if (!searchInput.trim()) {
       alert("Please enter a search query.");
       return;
     }
@@ -28,12 +20,10 @@ const SearchBar = ({ formValues, setFormValues }) => {
       const response = await fetch(`${BASE_URL}/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: emailInput }),
+        body: JSON.stringify({ query: searchInput }),
       });
 
       const data = await response.json();
-      console.log("API Response:", data);
-
       if (response.ok && data.results?.length > 0) {
         setSearchResults(data.results);
       } else {
@@ -49,46 +39,20 @@ const SearchBar = ({ formValues, setFormValues }) => {
   };
 
   const handleContactSelect = (contact) => {
-    const {
-      firstname,
-      lastname,
-      dateofbirth,
-      placeofbirth,
-      gender,
-      idnumber,
-      dateofissue,
-      expirydate,
-      country,
-      email,
-    } = contact.properties || {};
-
-    setFormValues({
-      ...formValues,
-      firstname: firstname || "",
-      lastname: lastname || "",
-      dateofbirth: dateofbirth || "",
-      placeofbirth: placeofbirth || "",
-      gender: gender || "",
-      idnumber: idnumber || "",
-      dateofissue: dateofissue || "",
-      expirydate: expirydate || "",
-      country: country || "",
-      email: email || "",
-    });
-
+    setFormValues({ ...formValues, ...contact.properties });
     setSearchResults([]);
-    setEmailInput("");
+    setSearchInput("");
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: "16px", marginBottom: "16px" }}>
       {/* Search Input */}
       <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
         <TextField
           variant="outlined"
           placeholder="Enter email, first name, or last name"
-          value={emailInput}
-          onChange={(e) => setEmailInput(e.target.value)}
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
           fullWidth
         />
         <IconButton onClick={handleSearch} disabled={isLoading} color="primary">
@@ -96,7 +60,7 @@ const SearchBar = ({ formValues, setFormValues }) => {
         </IconButton>
       </div>
 
-      {/* Dropdown for Search Results */}
+      {/* Search Results Dropdown */}
       {searchResults.length > 0 && (
         <div
           style={{
@@ -126,9 +90,6 @@ const SearchBar = ({ formValues, setFormValues }) => {
           ))}
         </div>
       )}
-
-      {/* Spacing between search bar and first input field */}
-      <div style={{ marginTop: "16px" }} />
     </div>
   );
 };

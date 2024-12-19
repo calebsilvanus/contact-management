@@ -1,33 +1,36 @@
 import React from "react";
-import { Button } from "@mui/material";
 import JSZip from "jszip";
+import { saveAs } from "file-saver";
+import { Button } from "@mui/material";
 
-const DownloadButton = ({ contactData }) => {
+const DownloadButton = ({ formValues }) => {
   const handleDownload = async () => {
+    const name = formValues.firstname || "contact";
     const zip = new JSZip();
 
-    // Add all fields to a JSON file
-    const jsonContent = JSON.stringify(contactData, null, 2);
-    zip.file("contact-data.json", jsonContent);
+    // Add the form data as a .txt file
+    const formData = Object.entries(formValues)
+      .map(([key, value]) => `${key}: ${value}`)
+      .join("\n");
+    zip.file(`${name}.txt`, formData);
 
-    // Generate the zip file
-    const blob = await zip.generateAsync({ type: "blob" });
-    const link = document.createElement("a");
-    link.href = URL.createObjectURL(blob);
-    link.download = "contact-data.zip";
-    link.click();
+    // Generate and download the ZIP file
+    try {
+      const content = await zip.generateAsync({ type: "blob" });
+      saveAs(content, `${name}.zip`);
+    } catch (error) {
+      console.error("Error generating ZIP file:", error);
+    }
   };
 
   return (
-    <div style={{ marginTop: "20px", textAlign: "center" }}>
-      <Button
-        variant="contained"
-        color="success"
-        onClick={handleDownload}
-      >
-        Download as Zip
-      </Button>
-    </div>
+    <Button
+      variant="contained"
+      style={{ backgroundColor: "#004d40", color: "#fff", marginTop: "16px" }}
+      onClick={handleDownload}
+    >
+      Download as ZIP
+    </Button>
   );
 };
 
